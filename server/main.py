@@ -1,3 +1,5 @@
+import random
+from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
@@ -46,6 +48,68 @@ def apply_filters(items: list, warehouse: Optional[str] = None, category: Option
 
     return filtered
 
+def build_sku_cost_map(inventory: list) -> dict:
+    """Build a SKU -> unit_cost lookup. First inventory row wins for duplicate SKUs."""
+    cost_map = {}
+    for item in inventory:
+        cost_map.setdefault(item['sku'], item['unit_cost'])
+    return cost_map
+
+def recommend_restock_items(demand_forecasts: list, inventory: list, budget: float) -> dict:
+    """Greedily recommend demand-forecast items to restock within a budget.
+
+    Candidates are forecast items with a positive demand gap (forecasted -
+    current) and a resolvable unit cost. They're ranked with increasing-trend
+    items first, then by largest gap, and filled greedily against the budget -
+    taking a partial quantity on the last affordable item rather than skipping
+    it, since that maximizes budget utilization.
+    """
+    cost_map = build_sku_cost_map(inventory)
+
+    candidates = []
+    for forecast in demand_forecasts:
+        gap = forecast['forecasted_demand'] - forecast['current_demand']
+        unit_cost = cost_map.get(forecast['item_sku'])
+        if gap > 0 and unit_cost is not None:
+            candidates.append({**forecast, 'gap': gap, 'unit_cost': unit_cost})
+
+    candidates.sort(key=lambda c: (c['trend'] == 'increasing', c['gap']), reverse=True)
+
+    recommended = []
+    remaining_budget = budget
+    for candidate in candidates:
+        unit_cost = candidate['unit_cost']
+        full_cost = candidate['gap'] * unit_cost
+
+        if full_cost <= remaining_budget:
+            quantity = candidate['gap']
+        else:
+            quantity = int(remaining_budget // unit_cost)
+
+        if quantity <= 0:
+            continue
+
+        line_total = round(quantity * unit_cost, 2)
+        remaining_budget -= line_total
+
+        recommended.append({
+            'item_sku': candidate['item_sku'],
+            'item_name': candidate['item_name'],
+            'current_demand': candidate['current_demand'],
+            'forecasted_demand': candidate['forecasted_demand'],
+            'trend': candidate['trend'],
+            'unit_cost': unit_cost,
+            'recommended_quantity': quantity,
+            'line_total': line_total
+        })
+
+    total_cost = round(sum(item['line_total'] for item in recommended), 2)
+    return {
+        'recommended_items': recommended,
+        'total_cost': total_cost,
+        'remaining_budget': round(budget - total_cost, 2)
+    }
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -80,6 +144,7 @@ class Order(BaseModel):
     actual_delivery: Optional[str] = None
     warehouse: Optional[str] = None
     category: Optional[str] = None
+    source: Optional[str] = None
 
 class DemandForecast(BaseModel):
     id: str
@@ -119,6 +184,26 @@ class CreatePurchaseOrderRequest(BaseModel):
     unit_cost: float
     expected_delivery_date: str
     notes: Optional[str] = None
+
+class RestockRecommendationItem(BaseModel):
+    item_sku: str
+    item_name: str
+    current_demand: int
+    forecasted_demand: int
+    trend: str
+    unit_cost: float
+    recommended_quantity: int
+    line_total: float
+
+class RestockRecommendationResponse(BaseModel):
+    budget: float
+    recommended_items: List[RestockRecommendationItem]
+    total_cost: float
+    remaining_budget: float
+
+class PlaceRestockOrderRequest(BaseModel):
+    budget: float
+    items: List[RestockRecommendationItem]
 
 # API endpoints
 @app.get("/")
@@ -303,6 +388,60 @@ def get_monthly_trends():
     result = list(months.values())
     result.sort(key=lambda x: x['month'])
     return result
+
+@app.get("/api/restocking/recommendations", response_model=RestockRecommendationResponse)
+def get_restock_recommendations(budget: float):
+    """Recommend demand-forecast items to restock within a budget"""
+    if budget <= 0:
+        raise HTTPException(status_code=400, detail="Budget must be greater than 0")
+
+    result = recommend_restock_items(demand_forecasts, inventory_items, budget)
+    return {
+        'budget': budget,
+        'recommended_items': result['recommended_items'],
+        'total_cost': result['total_cost'],
+        'remaining_budget': result['remaining_budget']
+    }
+
+@app.post("/api/restocking/orders", response_model=Order)
+def place_restock_order(request: PlaceRestockOrderRequest):
+    """Place a restocking order built from recommended items"""
+    if not request.items:
+        raise HTTPException(status_code=400, detail="Cannot place an empty restocking order")
+
+    total_value = round(sum(item.recommended_quantity * item.unit_cost for item in request.items), 2)
+    if total_value > request.budget + 0.01:
+        raise HTTPException(status_code=400, detail="Order total exceeds the stated budget")
+
+    new_id = str(max((int(order['id']) for order in orders), default=0) + 1)
+    order_date = datetime.now(timezone.utc).replace(tzinfo=None)
+    expected_delivery = order_date + timedelta(days=random.randint(7, 14))
+
+    new_order = {
+        'id': new_id,
+        'order_number': f"ORD-RESTOCK-{new_id}",
+        'customer': 'Internal Restocking',
+        'items': [
+            {
+                'sku': item.item_sku,
+                'name': item.item_name,
+                'quantity': item.recommended_quantity,
+                'unit_price': item.unit_cost
+            }
+            for item in request.items
+        ],
+        'status': 'Processing',
+        'order_date': order_date.isoformat(),
+        'expected_delivery': expected_delivery.isoformat(),
+        'total_value': total_value,
+        'actual_delivery': None,
+        'warehouse': None,
+        'category': None,
+        'source': 'restocking'
+    }
+
+    orders.append(new_order)
+    return new_order
 
 if __name__ == "__main__":
     import uvicorn

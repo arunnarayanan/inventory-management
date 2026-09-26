@@ -4,6 +4,7 @@ export default {
     overview: '概要',
     inventory: '在庫',
     orders: '注文',
+    restocking: '再入荷',
     finance: '財務',
     demandForecast: '需要予測',
     companyName: '触媒コンポーネンツ',
@@ -112,6 +113,9 @@ export default {
     onTimeDelivery: '定時配達',
     itemsCount: '{count}件',
     quantity: '数量',
+    submittedOrders: '提出済み注文',
+    leadTimeDays: '{count}日',
+    noSubmittedOrders: 'まだ再入荷注文は提出されていません',
     table: {
       orderNumber: '注文番号',
       orderId: '注文ID',
@@ -125,7 +129,8 @@ export default {
       totalValue: '合計金額',
       status: 'ステータス',
       expectedDelivery: '予定配達日',
-      actualDelivery: '実際の配達日'
+      actualDelivery: '実際の配達日',
+      leadTime: 'リードタイム'
     }
   },
 
@@ -186,6 +191,32 @@ export default {
       trend: 'トレンド',
       period: '期間'
     }
+  },
+
+  // Restocking
+  restocking: {
+    title: '再入荷',
+    description: '予算に基づく再入荷の推奨を確認し、注文を行う',
+    budgetLabel: '再入荷予算',
+    recommendedItems: '推奨品目',
+    table: {
+      sku: 'SKU',
+      itemName: '品目名',
+      trend: 'トレンド',
+      currentDemand: '現在の需要',
+      forecastedDemand: '予測需要',
+      unitCost: '単価',
+      quantity: '数量',
+      lineTotal: '小計'
+    },
+    totalCost: '合計コスト',
+    remainingBudget: '残り予算',
+    noRecommendations: 'この予算では推奨できる品目がありません',
+    placeOrderButton: '注文する',
+    placingOrder: '注文を処理中...',
+    orderPlacedSuccess: '注文が正常に送信されました。',
+    orderPlacedError: '注文の送信に失敗しました。',
+    viewInOrders: '注文タブで確認する'
   },
 
   // Filters
