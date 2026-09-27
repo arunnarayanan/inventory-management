@@ -121,28 +121,29 @@ const handleLogout = () => {
 }
 
 .profile-button {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 0.625rem;
   padding: 0.5rem 0.875rem;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
 }
 
 .profile-button:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: var(--color-surface);
+  border-color: var(--color-accent);
 }
 
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, #c2410c 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -155,27 +156,31 @@ const handleLogout = () => {
 .profile-name {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .chevron {
-  color: #64748b;
+  color: var(--color-text-muted);
   transition: transform 0.2s ease;
+  margin-left: auto;
 }
 
 .chevron-open {
   transform: rotate(180deg);
 }
 
+/* Sidebar footer trigger sits at the bottom of the viewport, so the dropdown must open
+   upward (bottom, not top) or it would render off-screen. */
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  bottom: calc(100% + 0.5rem);
+  left: 0;
   right: 0;
   min-width: 280px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   z-index: 1000;
   overflow: hidden;
 }
@@ -185,14 +190,14 @@ const handleLogout = () => {
   display: flex;
   gap: 0.875rem;
   align-items: center;
-  background: #f8fafc;
+  background: var(--color-surface);
 }
 
 .avatar-large {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, #c2410c 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -210,14 +215,14 @@ const handleLogout = () => {
 
 .user-name {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text);
   font-size: 0.938rem;
   margin-bottom: 0.25rem;
 }
 
 .user-email {
   font-size: 0.813rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -225,7 +230,7 @@ const handleLogout = () => {
 
 .dropdown-divider {
   height: 1px;
-  background: #e2e8f0;
+  background: var(--color-border);
   margin: 0.5rem 0;
 }
 
@@ -243,33 +248,33 @@ const handleLogout = () => {
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #334155;
+  color: var(--color-text);
 }
 
 .dropdown-item:hover {
-  background: #f8fafc;
+  background: var(--color-surface);
 }
 
 .dropdown-item svg {
-  color: #64748b;
+  color: var(--color-text-muted);
   flex-shrink: 0;
 }
 
 .dropdown-item.logout {
-  color: #dc2626;
+  color: var(--color-danger);
 }
 
 .dropdown-item.logout svg {
-  color: #dc2626;
+  color: var(--color-danger);
 }
 
 .dropdown-item.logout:hover {
-  background: #fef2f2;
+  background: var(--color-danger-subtle);
 }
 
 .task-badge {
   margin-left: auto;
-  background: #2563eb;
+  background: var(--color-accent);
   color: white;
   font-size: 0.75rem;
   font-weight: 600;

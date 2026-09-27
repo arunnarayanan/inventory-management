@@ -1,45 +1,59 @@
 <template>
   <div class="app">
-    <header class="top-nav">
-      <div class="nav-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
         <div class="logo">
           <h1>{{ t('nav.companyName') }}</h1>
           <span class="subtitle">{{ t('nav.subtitle') }}</span>
         </div>
-        <nav class="nav-tabs">
-          <router-link to="/" :class="{ active: $route.path === '/' }">
-            {{ t('nav.overview') }}
-          </router-link>
-          <router-link to="/inventory" :class="{ active: $route.path === '/inventory' }">
-            {{ t('nav.inventory') }}
-          </router-link>
-          <router-link to="/orders" :class="{ active: $route.path === '/orders' }">
-            {{ t('nav.orders') }}
-          </router-link>
-          <router-link to="/restocking" :class="{ active: $route.path === '/restocking' }">
-            {{ t('nav.restocking') }}
-          </router-link>
-          <router-link to="/spending" :class="{ active: $route.path === '/spending' }">
-            {{ t('nav.finance') }}
-          </router-link>
-          <router-link to="/demand" :class="{ active: $route.path === '/demand' }">
-            {{ t('nav.demandForecast') }}
-          </router-link>
-          <router-link to="/reports" :class="{ active: $route.path === '/reports' }">
-            {{ t('nav.reports') }}
-          </router-link>
-        </nav>
+      </div>
+
+      <nav class="sidebar-nav">
+        <router-link to="/" :class="{ active: $route.path === '/' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 8L10 2.5L17 8V16.5C17 17.0523 16.5523 17.5 16 17.5H12.5V12H7.5V17.5H4C3.44772 17.5 3 17.0523 3 16.5V8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>{{ t('nav.overview') }}</span>
+        </router-link>
+        <router-link to="/inventory" :class="{ active: $route.path === '/inventory' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M10 2L17.5 6V14L10 18L2.5 14V6L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2.5 6L10 10M10 10L17.5 6M10 10V18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>{{ t('nav.inventory') }}</span>
+        </router-link>
+        <router-link to="/orders" :class="{ active: $route.path === '/orders' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><rect x="4" y="3.5" width="12" height="15" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 3V2.5C7.5 1.94772 7.94772 1.5 8.5 1.5H11.5C12.0523 1.5 12.5 1.94772 12.5 2.5V3" stroke="currentColor" stroke-width="1.5"/><path d="M7 9H13M7 12.5H13M7 15.5H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>{{ t('nav.orders') }}</span>
+        </router-link>
+        <router-link to="/restocking" :class="{ active: $route.path === '/restocking' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M17 10C17 13.866 13.866 17 10 17C7.5 17 5.29 15.67 4 13.7M3 10C3 6.13401 6.13401 3 10 3C12.5 3 14.71 4.33 16 6.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M4 9V13.7H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 11V6.3H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>{{ t('nav.restocking') }}</span>
+        </router-link>
+        <router-link to="/spending" :class="{ active: $route.path === '/spending' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M10 2V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.5 5.5C13.5 5.5 12.2 4 10 4C8 4 6.5 5 6.5 6.5C6.5 9.5 13.5 8.5 13.5 12.5C13.5 14 12 15 10 15C7.8 15 6.5 13.5 6.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>{{ t('nav.finance') }}</span>
+        </router-link>
+        <router-link to="/demand" :class="{ active: $route.path === '/demand' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M2.5 14.5L8 9L11 12L17.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 5.5H17.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>{{ t('nav.demandForecast') }}</span>
+        </router-link>
+        <router-link to="/reports" :class="{ active: $route.path === '/reports' }">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 17V3M3 17H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="6" y="10" width="2.5" height="5" fill="currentColor"/><rect x="10.5" y="7" width="2.5" height="8" fill="currentColor"/><rect x="13.5" y="5" width="2.5" height="10" fill="currentColor"/></svg>
+          <span>{{ t('nav.reports') }}</span>
+        </router-link>
+      </nav>
+
+      <div class="sidebar-footer">
         <LanguageSwitcher />
         <ProfileMenu
           @show-profile-details="showProfileDetails = true"
           @show-tasks="showTasks = true"
         />
       </div>
-    </header>
-    <FilterBar />
-    <main class="main-content">
-      <router-view />
-    </main>
+    </aside>
+
+    <div class="main-column">
+      <FilterBar />
+      <main class="main-content">
+        <router-view />
+      </main>
+    </div>
 
     <ProfileDetailsModal
       :is-open="showProfileDetails"
@@ -165,6 +179,47 @@ export default {
 </script>
 
 <style>
+:root {
+  /* Neutrals - dark navy surfaces */
+  --color-background: #0b1120;
+  --color-surface: #111a2e;
+  --color-surface-alt: #1a2540;
+  --color-border: #24304d;
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+
+  /* Accent - orange */
+  --color-accent: #f97316;
+  --color-accent-hover: #fb923c;
+  --color-accent-subtle: rgba(249, 115, 22, 0.14);
+
+  /* Semantic */
+  --color-success: #22c55e;
+  --color-success-subtle: rgba(34, 197, 94, 0.15);
+  --color-warning: #eab308;
+  --color-warning-subtle: rgba(234, 179, 8, 0.15);
+  --color-danger: #ef4444;
+  --color-danger-subtle: rgba(239, 68, 68, 0.15);
+  --color-info: #38bdf8;
+  --color-info-subtle: rgba(56, 189, 248, 0.15);
+
+  /* Spacing (4px base) */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-8: 48px; --space-10: 64px;
+
+  /* Typography */
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-base: 1rem;
+  --text-lg: 1.125rem; --text-xl: 1.5rem; --text-2xl: 2rem;
+  --font-weight-normal: 400; --font-weight-medium: 500;
+  --font-weight-semibold: 600; --font-weight-bold: 700;
+
+  /* Radius/shadow */
+  --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -173,107 +228,111 @@ export default {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #f8fafc;
-  color: #1e293b;
+  background: var(--color-background);
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .app {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
+  background: var(--color-background);
 }
 
-.top-nav {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 0;
+  height: 100vh;
+  overflow-y: auto;
   z-index: 100;
 }
 
-.nav-container {
-  max-width: 1600px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-  height: 70px;
-}
-
-.nav-container > .nav-tabs {
-  margin-left: auto;
-  margin-right: 1rem;
-}
-
-.nav-container > .language-switcher {
-  margin-right: 1rem;
+.sidebar-header {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .logo {
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.375rem;
 }
 
 .logo h1 {
-  font-size: 1.375rem;
+  font-size: 1.125rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.025em;
 }
 
 .subtitle {
-  font-size: 0.813rem;
-  color: #64748b;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
   font-weight: 400;
-  padding-left: 0.75rem;
-  border-left: 1px solid #e2e8f0;
 }
 
-.nav-tabs {
+.sidebar-nav {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   gap: 0.25rem;
+  padding: 1rem 0.875rem;
 }
 
-.nav-tabs a {
-  padding: 0.625rem 1.25rem;
-  color: #64748b;
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  color: var(--color-text-muted);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.938rem;
-  border-radius: 6px;
+  font-size: 0.875rem;
+  border-radius: var(--radius-md);
   transition: all 0.2s ease;
-  position: relative;
 }
 
-.nav-tabs a:hover {
-  color: #0f172a;
-  background: #f1f5f9;
+.sidebar-nav a .nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
-.nav-tabs a.active {
-  color: #2563eb;
-  background: #eff6ff;
+.sidebar-nav a:hover {
+  color: var(--color-text);
+  background: var(--color-surface-alt);
 }
 
-.nav-tabs a.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #2563eb;
+.sidebar-nav a.active {
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+}
+
+.sidebar-footer {
+  padding: 1rem 0.875rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.main-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-content {
   flex: 1;
-  max-width: 1600px;
   width: 100%;
-  margin: 0 auto;
   padding: 1.5rem 2rem;
 }
 
@@ -284,13 +343,13 @@ body {
 .page-header h2 {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   margin-bottom: 0.375rem;
   letter-spacing: -0.025em;
 }
 
 .page-header p {
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 0.938rem;
 }
 
@@ -302,20 +361,20 @@ body {
 }
 
 .stat-card {
-  background: white;
+  background: var(--color-surface);
   padding: 1.25rem;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
   transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-label {
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -326,31 +385,31 @@ body {
 .stat-value {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.025em;
 }
 
 .stat-card.warning .stat-value {
-  color: #ea580c;
+  color: var(--color-warning);
 }
 
 .stat-card.success .stat-value {
-  color: #059669;
+  color: var(--color-success);
 }
 
 .stat-card.danger .stat-value {
-  color: #dc2626;
+  color: var(--color-danger);
 }
 
 .stat-card.info .stat-value {
-  color: #2563eb;
+  color: var(--color-info);
 }
 
 .card {
-  background: white;
-  border-radius: 10px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   padding: 1.25rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   margin-bottom: 1.25rem;
 }
 
@@ -360,13 +419,13 @@ body {
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.875rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .card-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.025em;
 }
 
@@ -380,16 +439,16 @@ table {
 }
 
 thead {
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--color-surface-alt);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 th {
   text-align: left;
   padding: 0.5rem 0.75rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-muted);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -397,8 +456,8 @@ th {
 
 td {
   padding: 0.5rem 0.75rem;
-  border-top: 1px solid #f1f5f9;
-  color: #334155;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
   font-size: 0.875rem;
 }
 
@@ -407,13 +466,13 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #f8fafc;
+  background: var(--color-surface-alt);
 }
 
 .badge {
   display: inline-block;
   padding: 0.313rem 0.75rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -421,68 +480,68 @@ tbody tr:hover {
 }
 
 .badge.success {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--color-success-subtle);
+  color: var(--color-success);
 }
 
 .badge.warning {
-  background: #fed7aa;
-  color: #92400e;
+  background: var(--color-warning-subtle);
+  color: var(--color-warning);
 }
 
 .badge.danger {
-  background: #fecaca;
-  color: #991b1b;
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
 }
 
 .badge.info {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--color-info-subtle);
+  color: var(--color-info);
 }
 
 .badge.increasing {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--color-success-subtle);
+  color: var(--color-success);
 }
 
 .badge.decreasing {
-  background: #fecaca;
-  color: #991b1b;
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
 }
 
 .badge.stable {
-  background: #e0e7ff;
-  color: #3730a3;
+  background: var(--color-info-subtle);
+  color: var(--color-info);
 }
 
 .badge.high {
-  background: #fecaca;
-  color: #991b1b;
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
 }
 
 .badge.medium {
-  background: #fed7aa;
-  color: #92400e;
+  background: var(--color-warning-subtle);
+  color: var(--color-warning);
 }
 
 .badge.low {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--color-info-subtle);
+  color: var(--color-info);
 }
 
 .loading {
   text-align: center;
   padding: 3rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 0.938rem;
 }
 
 .error {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
+  background: var(--color-danger-subtle);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin: 1rem 0;
   font-size: 0.938rem;
 }
