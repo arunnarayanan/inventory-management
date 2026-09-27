@@ -327,12 +327,20 @@ def get_recent_transactions():
     return recent_transactions
 
 @app.get("/api/reports/quarterly")
-def get_quarterly_reports():
+def get_quarterly_reports(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
     """Get quarterly performance reports"""
+    filtered_orders = apply_filters(orders, warehouse, category, status)
+    filtered_orders = filter_by_month(filtered_orders, month)
+
     # Calculate quarterly statistics from orders
     quarters = {}
 
-    for order in orders:
+    for order in filtered_orders:
         order_date = order.get('order_date', '')
         # Determine quarter
         if '2025-01' in order_date or '2025-02' in order_date or '2025-03' in order_date:
@@ -373,30 +381,38 @@ def get_quarterly_reports():
     return result
 
 @app.get("/api/reports/monthly-trends")
-def get_monthly_trends():
+def get_monthly_trends(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
     """Get month-over-month trends"""
+    filtered_orders = apply_filters(orders, warehouse, category, status)
+    filtered_orders = filter_by_month(filtered_orders, month)
+
     months = {}
 
-    for order in orders:
+    for order in filtered_orders:
         order_date = order.get('order_date', '')
         if not order_date:
             continue
 
         # Extract month (format: YYYY-MM-DD)
-        month = order_date[:7]  # Gets YYYY-MM
+        order_month = order_date[:7]  # Gets YYYY-MM
 
-        if month not in months:
-            months[month] = {
-                'month': month,
+        if order_month not in months:
+            months[order_month] = {
+                'month': order_month,
                 'order_count': 0,
                 'revenue': 0,
                 'delivered_count': 0
             }
 
-        months[month]['order_count'] += 1
-        months[month]['revenue'] += order.get('total_value', 0)
+        months[order_month]['order_count'] += 1
+        months[order_month]['revenue'] += order.get('total_value', 0)
         if order.get('status') == 'Delivered':
-            months[month]['delivered_count'] += 1
+            months[order_month]['delivered_count'] += 1
 
     # Convert to list and sort
     result = list(months.values())
@@ -526,6 +542,17 @@ def create_purchase_order(request: CreatePurchaseOrderRequest):
     }
     purchase_orders.append(new_po)
     return new_po
+
+@app.delete("/api/purchase-orders/{po_id}")
+def cancel_purchase_order(po_id: str):
+    """Cancel a purchase order while it's still pending"""
+    po = next((po for po in purchase_orders if po["id"] == po_id), None)
+    if not po:
+        raise HTTPException(status_code=404, detail="Purchase order not found")
+    if po["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Only pending purchase orders can be cancelled")
+    purchase_orders.remove(po)
+    return {"message": "Purchase order cancelled"}
 
 if __name__ == "__main__":
     import uvicorn

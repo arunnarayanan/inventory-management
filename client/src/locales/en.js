@@ -7,6 +7,7 @@ export default {
     restocking: 'Restocking',
     finance: 'Finance',
     demandForecast: 'Demand Forecast',
+    reports: 'Reports',
     companyName: 'Catalyst Components',
     subtitle: 'Inventory Management System'
   },
@@ -217,7 +218,75 @@ export default {
     placingOrder: 'Placing order...',
     orderPlacedSuccess: 'Order placed successfully.',
     orderPlacedError: 'Failed to place order.',
-    viewInOrders: 'View it in the Orders tab'
+    viewInOrders: 'View it in the Orders tab',
+    confirmPlaceOrderMessage: 'Place an order for {count} items totaling {amount}? This cannot be undone.',
+    confirmButton: 'Confirm & Place Order'
+  },
+
+  // Reports
+  reports: {
+    title: 'Performance Reports',
+    description: 'View quarterly performance metrics and monthly trends',
+    quarterlyPerformance: 'Quarterly Performance',
+    quarterlyTable: {
+      quarter: 'Quarter',
+      totalOrders: 'Total Orders',
+      totalRevenue: 'Total Revenue',
+      avgOrderValue: 'Avg Order Value',
+      fulfillmentRate: 'Fulfillment Rate'
+    },
+    monthlyRevenueTrend: 'Monthly Revenue Trend',
+    monthOverMonthAnalysis: 'Month-over-Month Analysis',
+    monthlyTable: {
+      month: 'Month',
+      orders: 'Orders',
+      revenue: 'Revenue',
+      change: 'Change',
+      growthRate: 'Growth Rate'
+    },
+    totalRevenueYTD: 'Total Revenue (YTD)',
+    avgMonthlyRevenue: 'Avg Monthly Revenue',
+    totalOrdersYTD: 'Total Orders (YTD)',
+    bestPerformingQuarter: 'Best Performing Quarter',
+    loadError: 'Failed to load reports'
+  },
+
+  // Backlog
+  backlog: {
+    title: 'Backlog Management',
+    description: 'Track and resolve inventory shortages',
+    highPriority: 'High Priority',
+    mediumPriority: 'Medium Priority',
+    lowPriority: 'Low Priority',
+    totalItems: 'Total Backlog Items',
+    items: 'Backlog Items',
+    noItems: 'No backlog items - all orders can be fulfilled!',
+    table: {
+      orderId: 'Order ID',
+      sku: 'SKU',
+      itemName: 'Item Name',
+      quantityNeeded: 'Quantity Needed',
+      quantityAvailable: 'Quantity Available',
+      shortage: 'Shortage',
+      daysDelayed: 'Days Delayed',
+      priority: 'Priority'
+    },
+    unitsShort: 'units short',
+    days: 'days',
+    loadError: 'Failed to load backlog',
+    detail: {
+      title: 'Inventory Shortage Details',
+      shortageAmount: 'Shortage Amount',
+      units: 'units',
+      daysDelayed: 'Days Delayed',
+      orderId: 'Order ID',
+      itemSku: 'Item SKU',
+      quantityNeeded: 'Quantity Needed',
+      quantityAvailable: 'Quantity Available',
+      expectedDate: 'Expected Date',
+      status: 'Status',
+      priorityLabel: 'Priority'
+    }
   },
 
   // Filters

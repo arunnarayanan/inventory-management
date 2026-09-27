@@ -7,6 +7,7 @@ export default {
     restocking: '再入荷',
     finance: '財務',
     demandForecast: '需要予測',
+    reports: 'レポート',
     companyName: '触媒コンポーネンツ',
     subtitle: '在庫管理システム'
   },
@@ -217,7 +218,75 @@ export default {
     placingOrder: '注文を処理中...',
     orderPlacedSuccess: '注文が正常に送信されました。',
     orderPlacedError: '注文の送信に失敗しました。',
-    viewInOrders: '注文タブで確認する'
+    viewInOrders: '注文タブで確認する',
+    confirmPlaceOrderMessage: '{count}点の商品、合計{amount}の注文を行いますか？この操作は取り消せません。',
+    confirmButton: '確認して注文する'
+  },
+
+  // Reports
+  reports: {
+    title: 'パフォーマンスレポート',
+    description: '四半期の業績指標と月次トレンドを表示',
+    quarterlyPerformance: '四半期業績',
+    quarterlyTable: {
+      quarter: '四半期',
+      totalOrders: '総注文数',
+      totalRevenue: '総収益',
+      avgOrderValue: '平均注文額',
+      fulfillmentRate: '充足率'
+    },
+    monthlyRevenueTrend: '月次収益トレンド',
+    monthOverMonthAnalysis: '前月比分析',
+    monthlyTable: {
+      month: '月',
+      orders: '注文数',
+      revenue: '収益',
+      change: '変化額',
+      growthRate: '成長率'
+    },
+    totalRevenueYTD: '総収益（年初来）',
+    avgMonthlyRevenue: '平均月間収益',
+    totalOrdersYTD: '総注文数（年初来）',
+    bestPerformingQuarter: '最高業績四半期',
+    loadError: 'レポートの読み込みに失敗しました'
+  },
+
+  // Backlog
+  backlog: {
+    title: 'バックログ管理',
+    description: '在庫不足を追跡して解決する',
+    highPriority: '優先度：高',
+    mediumPriority: '優先度：中',
+    lowPriority: '優先度：低',
+    totalItems: 'バックログ総件数',
+    items: 'バックログ項目',
+    noItems: 'バックログ項目はありません - すべての注文を履行できます！',
+    table: {
+      orderId: '注文ID',
+      sku: 'SKU',
+      itemName: '品目名',
+      quantityNeeded: '必要数量',
+      quantityAvailable: '利用可能数量',
+      shortage: '不足数',
+      daysDelayed: '遅延日数',
+      priority: '優先度'
+    },
+    unitsShort: '個不足',
+    days: '日',
+    loadError: 'バックログの読み込みに失敗しました',
+    detail: {
+      title: '在庫不足の詳細',
+      shortageAmount: '不足数量',
+      units: '個',
+      daysDelayed: '遅延日数',
+      orderId: '注文ID',
+      itemSku: '品目SKU',
+      quantityNeeded: '必要数量',
+      quantityAvailable: '利用可能数量',
+      expectedDate: '予定日',
+      status: 'ステータス',
+      priorityLabel: '優先度'
+    }
   },
 
   // Filters
