@@ -1,9 +1,10 @@
 {
   "mcpServers": {
     "playwright": {
-      "command": "npx",
+      "command": "/bin/zsh",
       "args": [
-        "@playwright/mcp@latest"
+        "-c",
+        "export PATH=\"/Users/arun/.nvm/versions/node/v20.20.2/bin:$PATH\"; exec npx -y @playwright/mcp@latest"
       ]
     },
     "github": {
