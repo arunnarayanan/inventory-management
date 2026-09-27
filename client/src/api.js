@@ -125,11 +125,17 @@ export const api = {
     return response.data;
   },
 
-  async getRestockRecommendations(budget) {
+  async cancelPurchaseOrder(poId) {
+    const response = await axios.delete(`${API_BASE_URL}/purchase-orders/${poId}`);
+    return response.data;
+  },
+
+  async getRestockRecommendations(budget, { signal } = {}) {
     const params = new URLSearchParams();
     params.append("budget", budget);
     const response = await axios.get(
       `${API_BASE_URL}/restocking/recommendations?${params.toString()}`,
+      { signal },
     );
     return response.data;
   },

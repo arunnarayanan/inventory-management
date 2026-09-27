@@ -83,12 +83,27 @@
 
         <div class="place-order-row">
           <button
+            v-if="!confirmingPlaceOrder"
             class="place-order-btn"
             :disabled="recommendationsLoading || placingOrder || recommendedItems.length === 0"
-            @click="placeOrder"
+            @click="confirmingPlaceOrder = true"
           >
             {{ placingOrder ? t('restocking.placingOrder') : t('restocking.placeOrderButton') }}
           </button>
+        </div>
+
+        <div v-if="confirmingPlaceOrder" class="confirm-row">
+          <span class="confirm-message">
+            {{ t('restocking.confirmPlaceOrderMessage', { count: recommendedItems.length, amount: currencySymbol + totalCost.toLocaleString() }) }}
+          </span>
+          <div class="confirm-actions">
+            <button class="confirm-cancel-btn" :disabled="placingOrder" @click="confirmingPlaceOrder = false">
+              {{ t('common.cancel') }}
+            </button>
+            <button class="confirm-place-btn" :disabled="placingOrder" @click="placeOrder">
+              {{ placingOrder ? t('restocking.placingOrder') : t('restocking.confirmButton') }}
+            </button>
+          </div>
         </div>
 
         <div v-if="placeOrderSuccess" class="success">
@@ -105,6 +120,7 @@
 
 <script>
 import { ref, computed, onMounted, watch } from 'vue'
+import axios from 'axios'
 import { api } from '../api'
 import { useI18n } from '../composables/useI18n'
 
@@ -134,6 +150,7 @@ export default {
     const placingOrder = ref(false)
     const placeOrderSuccess = ref(false)
     const placeOrderError = ref(null)
+    const confirmingPlaceOrder = ref(false)
 
     // Ceiling budget: the total spend needed to fully close every positive demand gap,
     // so the slider's top end always represents "fully restock everything forecasted".
@@ -156,25 +173,39 @@ export default {
     // lets loadInitialData suppress that one auto-triggered fetch since it already awaits its
     // own immediate (non-debounced) fetch for a snappier first paint.
     let skipNextBudgetWatch = false
+    // Tracks the in-flight recommendations request so a stale response from a superseded
+    // budget value can never overwrite the recommendations for the current budget.
+    let currentAbortController = null
 
     const fetchRecommendations = async () => {
+      if (currentAbortController) {
+        currentAbortController.abort()
+      }
       if (!budget.value || budget.value <= 0) {
+        currentAbortController = null
         recommendedItems.value = []
         totalCost.value = 0
         remainingBudget.value = 0
         return
       }
+      const controller = new AbortController()
+      currentAbortController = controller
       try {
         recommendationsLoading.value = true
         recommendationsError.value = null
-        const data = await api.getRestockRecommendations(budget.value)
+        const data = await api.getRestockRecommendations(budget.value, { signal: controller.signal })
         recommendedItems.value = data.recommended_items
         totalCost.value = data.total_cost
         remainingBudget.value = data.remaining_budget
       } catch (err) {
+        if (axios.isCancel(err) || err.code === 'ERR_CANCELED' || err.name === 'CanceledError') {
+          return
+        }
         recommendationsError.value = 'Failed to load restocking recommendations: ' + err.message
       } finally {
-        recommendationsLoading.value = false
+        if (currentAbortController === controller) {
+          recommendationsLoading.value = false
+        }
       }
     }
 
@@ -196,6 +227,7 @@ export default {
       // budget changes again that snapshot is stale, so clear the banners.
       placeOrderSuccess.value = false
       placeOrderError.value = null
+      confirmingPlaceOrder.value = false
       scheduleFetchRecommendations()
     })
 
@@ -233,6 +265,7 @@ export default {
         placeOrderError.value = 'Failed to place order: ' + err.message
       } finally {
         placingOrder.value = false
+        confirmingPlaceOrder.value = false
       }
     }
 
@@ -253,6 +286,7 @@ export default {
       placingOrder,
       placeOrderSuccess,
       placeOrderError,
+      confirmingPlaceOrder,
       placeOrder
     }
   }
@@ -354,6 +388,77 @@ export default {
 
 .place-order-btn:disabled {
   background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.confirm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.confirm-message {
+  color: #0f172a;
+  font-size: 0.938rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.confirm-cancel-btn {
+  padding: 0.625rem 1.25rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.confirm-cancel-btn:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.confirm-cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirm-place-btn {
+  padding: 0.625rem 1.25rem;
+  background: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.confirm-place-btn:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.confirm-place-btn:disabled {
+  background: #cbd5e1;
+  border-color: #cbd5e1;
   cursor: not-allowed;
 }
 

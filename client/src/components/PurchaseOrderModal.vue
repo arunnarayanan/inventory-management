@@ -24,7 +24,7 @@
             </div>
 
             <!-- CREATE MODE -->
-            <form v-if="mode === 'create'" class="po-form" @submit.prevent="submitForm">
+            <form v-if="mode === 'create'" class="po-form" @submit.prevent="handleFormSubmit">
               <div class="summary-card danger">
                 <div class="summary-label">Shortage Amount</div>
                 <div class="summary-value">{{ shortage }} units</div>
@@ -97,6 +97,20 @@
                 <div class="summary-label">Line Total</div>
                 <div class="summary-value">{{ formatCurrency(lineTotal) }}</div>
               </div>
+
+              <div v-if="confirmingSubmit" class="confirm-bar">
+                <span class="confirm-message">
+                  Create this purchase order for {{ formatCurrency(lineTotal) }}? This cannot be undone.
+                </span>
+                <div class="confirm-actions">
+                  <button type="button" class="btn-secondary" :disabled="submitting" @click="confirmingSubmit = false">
+                    Cancel
+                  </button>
+                  <button type="button" class="btn-primary" :disabled="submitting" @click="submitForm">
+                    {{ submitting ? 'Creating...' : 'Confirm & Create' }}
+                  </button>
+                </div>
+              </div>
             </form>
 
             <!-- VIEW MODE -->
@@ -144,18 +158,34 @@
                 </div>
               </div>
               <div v-else class="po-loading">No purchase order found.</div>
+
+              <div v-if="cancelError" class="form-error">{{ cancelError }}</div>
+
+              <div v-if="purchaseOrder && purchaseOrder.status === 'pending' && !confirmingCancel" class="cancel-po-row">
+                <button class="btn-danger-outline" @click="confirmingCancel = true">Cancel Purchase Order</button>
+              </div>
+
+              <div v-if="confirmingCancel" class="confirm-bar">
+                <span class="confirm-message">Cancel this purchase order? This cannot be undone.</span>
+                <div class="confirm-actions">
+                  <button class="btn-secondary" :disabled="cancelling" @click="confirmingCancel = false">Keep It</button>
+                  <button class="btn-danger" :disabled="cancelling" @click="cancelPO">
+                    {{ cancelling ? 'Cancelling...' : 'Confirm Cancel' }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="modal-footer">
             <button class="btn-secondary" @click="close">Close</button>
             <button
-              v-if="mode === 'create'"
+              v-if="mode === 'create' && !confirmingSubmit"
               class="btn-primary"
               :disabled="submitting"
-              @click="submitForm"
+              @click="confirmingSubmit = true"
             >
-              {{ submitting ? 'Creating...' : 'Create Purchase Order' }}
+              Create Purchase Order
             </button>
           </div>
         </div>
@@ -186,7 +216,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close', 'po-created'])
+const emit = defineEmits(['close', 'po-created', 'po-cancelled'])
 
 const shortage = computed(() => {
   if (!props.backlogItem) return 0
@@ -204,10 +234,15 @@ const defaultForm = () => ({
 const form = ref(defaultForm())
 const submitting = ref(false)
 const submitError = ref(null)
+const confirmingSubmit = ref(false)
 
 const purchaseOrder = ref(null)
 const loadingPO = ref(false)
 const loadError = ref(null)
+
+const confirmingCancel = ref(false)
+const cancelling = ref(false)
+const cancelError = ref(null)
 
 const lineTotal = computed(() => {
   const qty = Number(form.value.quantity) || 0
@@ -243,6 +278,7 @@ const resetCreateState = () => {
   form.value = defaultForm()
   submitError.value = null
   submitting.value = false
+  confirmingSubmit.value = false
 }
 
 const submitForm = async () => {
@@ -264,6 +300,31 @@ const submitForm = async () => {
     submitError.value = err.response?.data?.detail || 'Failed to create purchase order'
   } finally {
     submitting.value = false
+    confirmingSubmit.value = false
+  }
+}
+
+const handleFormSubmit = () => {
+  if (!confirmingSubmit.value) {
+    confirmingSubmit.value = true
+    return
+  }
+  submitForm()
+}
+
+const cancelPO = async () => {
+  if (!purchaseOrder.value || !props.backlogItem) return
+  cancelling.value = true
+  cancelError.value = null
+  try {
+    await api.cancelPurchaseOrder(purchaseOrder.value.id)
+    confirmingCancel.value = false
+    emit('po-cancelled', { backlog_item_id: props.backlogItem.id })
+    close()
+  } catch (err) {
+    cancelError.value = err.response?.data?.detail || 'Failed to cancel purchase order'
+  } finally {
+    cancelling.value = false
   }
 }
 
@@ -298,6 +359,9 @@ watch(
       resetCreateState()
     }
     if (isOpen && mode === 'view') {
+      confirmingCancel.value = false
+      cancelling.value = false
+      cancelError.value = null
       loadPurchaseOrder()
     }
   },
@@ -612,6 +676,77 @@ watch(
 }
 
 .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirm-bar {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.confirm-message {
+  color: #0f172a;
+  font-size: 0.938rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.cancel-po-row {
+  margin-top: 1.5rem;
+}
+
+.btn-danger-outline {
+  padding: 0.625rem 1.25rem;
+  background: white;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-danger-outline:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.btn-danger {
+  padding: 0.625rem 1.25rem;
+  background: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.btn-danger:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

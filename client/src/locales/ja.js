@@ -217,7 +217,37 @@ export default {
     placingOrder: '注文を処理中...',
     orderPlacedSuccess: '注文が正常に送信されました。',
     orderPlacedError: '注文の送信に失敗しました。',
-    viewInOrders: '注文タブで確認する'
+    viewInOrders: '注文タブで確認する',
+    confirmPlaceOrderMessage: '{count}点の商品、合計{amount}の注文を行いますか？この操作は取り消せません。',
+    confirmButton: '確認して注文する'
+  },
+
+  // Reports
+  reports: {
+    title: 'パフォーマンスレポート',
+    description: '四半期の業績指標と月次トレンドを表示',
+    quarterlyPerformance: '四半期業績',
+    quarterlyTable: {
+      quarter: '四半期',
+      totalOrders: '総注文数',
+      totalRevenue: '総収益',
+      avgOrderValue: '平均注文額',
+      fulfillmentRate: '充足率'
+    },
+    monthlyRevenueTrend: '月次収益トレンド',
+    monthOverMonthAnalysis: '前月比分析',
+    monthlyTable: {
+      month: '月',
+      orders: '注文数',
+      revenue: '収益',
+      change: '変化額',
+      growthRate: '成長率'
+    },
+    totalRevenueYTD: '総収益（年初来）',
+    avgMonthlyRevenue: '平均月間収益',
+    totalOrdersYTD: '総注文数（年初来）',
+    bestPerformingQuarter: '最高業績四半期',
+    loadError: 'レポートの読み込みに失敗しました'
   },
 
   // Filters

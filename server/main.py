@@ -527,6 +527,17 @@ def create_purchase_order(request: CreatePurchaseOrderRequest):
     purchase_orders.append(new_po)
     return new_po
 
+@app.delete("/api/purchase-orders/{po_id}")
+def cancel_purchase_order(po_id: str):
+    """Cancel a purchase order while it's still pending"""
+    po = next((po for po in purchase_orders if po["id"] == po_id), None)
+    if not po:
+        raise HTTPException(status_code=404, detail="Purchase order not found")
+    if po["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Only pending purchase orders can be cancelled")
+    purchase_orders.remove(po)
+    return {"message": "Purchase order cancelled"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)

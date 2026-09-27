@@ -292,6 +292,7 @@
       :mode="poModalMode"
       @close="showPOModal = false"
       @po-created="handlePOCreated"
+      @po-cancelled="handlePOCancelled"
     />
   </div>
 </template>
@@ -674,6 +675,17 @@ export default {
       showPOModal.value = false
     }
 
+    const handlePOCancelled = (payload) => {
+      // Reverse of handlePOCreated: clear the PO reference so the button
+      // reverts to "Create PO" for this backlog item.
+      const item = allBacklogItems.value.find(b => b.id === payload.backlog_item_id)
+      if (item) {
+        item.purchase_order_id = null
+        item.purchase_order = null
+      }
+      showPOModal.value = false
+    }
+
     // Watch for filter changes and reload data
     watch([selectedPeriod, selectedLocation, selectedCategory, selectedStatus], () => {
       loadData()
@@ -722,7 +734,8 @@ export default {
       poModalMode,
       openPOModal,
       viewPO,
-      handlePOCreated
+      handlePOCreated,
+      handlePOCancelled
     }
   }
 }

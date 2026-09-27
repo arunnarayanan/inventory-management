@@ -217,7 +217,37 @@ export default {
     placingOrder: 'Placing order...',
     orderPlacedSuccess: 'Order placed successfully.',
     orderPlacedError: 'Failed to place order.',
-    viewInOrders: 'View it in the Orders tab'
+    viewInOrders: 'View it in the Orders tab',
+    confirmPlaceOrderMessage: 'Place an order for {count} items totaling {amount}? This cannot be undone.',
+    confirmButton: 'Confirm & Place Order'
+  },
+
+  // Reports
+  reports: {
+    title: 'Performance Reports',
+    description: 'View quarterly performance metrics and monthly trends',
+    quarterlyPerformance: 'Quarterly Performance',
+    quarterlyTable: {
+      quarter: 'Quarter',
+      totalOrders: 'Total Orders',
+      totalRevenue: 'Total Revenue',
+      avgOrderValue: 'Avg Order Value',
+      fulfillmentRate: 'Fulfillment Rate'
+    },
+    monthlyRevenueTrend: 'Monthly Revenue Trend',
+    monthOverMonthAnalysis: 'Month-over-Month Analysis',
+    monthlyTable: {
+      month: 'Month',
+      orders: 'Orders',
+      revenue: 'Revenue',
+      change: 'Change',
+      growthRate: 'Growth Rate'
+    },
+    totalRevenueYTD: 'Total Revenue (YTD)',
+    avgMonthlyRevenue: 'Avg Monthly Revenue',
+    totalOrdersYTD: 'Total Orders (YTD)',
+    bestPerformingQuarter: 'Best Performing Quarter',
+    loadError: 'Failed to load reports'
   },
 
   // Filters
