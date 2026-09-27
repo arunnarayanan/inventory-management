@@ -306,7 +306,7 @@ export default {
   appearance: none;
   height: 6px;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: var(--color-surface-alt);
   outline: none;
 }
 
@@ -316,36 +316,36 @@ export default {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: var(--color-accent);
   cursor: pointer;
-  border: 3px solid white;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  border: 3px solid var(--color-surface);
+  box-shadow: var(--shadow-md);
   transition: background 0.2s ease;
 }
 
 .budget-slider::-webkit-slider-thumb:hover {
-  background: #2563eb;
+  background: var(--color-accent-hover);
 }
 
 .budget-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: var(--color-accent);
   cursor: pointer;
-  border: 3px solid white;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  border: 3px solid var(--color-surface);
+  box-shadow: var(--shadow-md);
   transition: background 0.2s ease;
 }
 
 .budget-slider::-moz-range-thumb:hover {
-  background: #2563eb;
+  background: var(--color-accent-hover);
 }
 
 .budget-slider::-moz-range-track {
   height: 6px;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: var(--color-surface-alt);
 }
 
 .budget-value {
@@ -353,13 +353,13 @@ export default {
   text-align: right;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 1.1rem;
   font-style: italic;
 }
@@ -372,10 +372,10 @@ export default {
 
 .place-order-btn {
   padding: 0.75rem 1.75rem;
-  background: #3b82f6;
+  background: var(--color-accent);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.938rem;
   cursor: pointer;
@@ -383,11 +383,11 @@ export default {
 }
 
 .place-order-btn:hover:not(:disabled) {
-  background: #2563eb;
+  background: var(--color-accent-hover);
 }
 
 .place-order-btn:disabled {
-  background: #cbd5e1;
+  background: var(--color-border);
   cursor: not-allowed;
 }
 
@@ -399,13 +399,13 @@ export default {
   flex-wrap: wrap;
   margin-top: 1.25rem;
   padding: 1rem 1.25rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .confirm-message {
-  color: #0f172a;
+  color: var(--color-text);
   font-size: 0.938rem;
   flex: 1;
   min-width: 200px;
@@ -419,19 +419,18 @@ export default {
 
 .confirm-cancel-btn {
   padding: 0.625rem 1.25rem;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-weight: 500;
   font-size: 0.875rem;
-  color: #334155;
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .confirm-cancel-btn:hover:not(:disabled) {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
+  background: var(--color-border);
 }
 
 .confirm-cancel-btn:disabled {
@@ -441,9 +440,9 @@ export default {
 
 .confirm-place-btn {
   padding: 0.625rem 1.25rem;
-  background: #3b82f6;
-  border: 1px solid #3b82f6;
-  border-radius: 8px;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.875rem;
   color: white;
@@ -452,22 +451,22 @@ export default {
 }
 
 .confirm-place-btn:hover:not(:disabled) {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
 }
 
 .confirm-place-btn:disabled {
-  background: #cbd5e1;
-  border-color: #cbd5e1;
+  background: var(--color-border);
+  border-color: var(--color-border);
   cursor: not-allowed;
 }
 
 .success {
-  background: #d1fae5;
-  border: 1px solid #a7f3d0;
-  color: #059669;
+  background: var(--color-success-subtle);
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-top: 1rem;
   font-size: 0.938rem;
   display: flex;
@@ -477,7 +476,7 @@ export default {
 }
 
 .success a {
-  color: #059669;
+  color: var(--color-success);
   font-weight: 600;
   text-decoration: underline;
 }
